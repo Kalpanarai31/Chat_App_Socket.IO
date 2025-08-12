@@ -1,5 +1,10 @@
 var socket = io();
 
+let btn = document.getElementById('btn');
+btn.onclick = function exec(){
+    socket.emit('from client');
+}
+
 socket.on('from_server', () => {
     console.log('Collected a new event from server');
     const div = document.createElement('div');
