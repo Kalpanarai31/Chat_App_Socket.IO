@@ -9,7 +9,7 @@
 <body>
     <h1>Chat box</h1>
 
-    <button id="startchat" data-roomid="<%= id %>">Start chat</button>
+    <input id="startchat" type="hidden" data-roomid="<%= id %>"></input>
 
     <input type="text" id="username" placeholder="username...">
 
@@ -36,15 +36,15 @@ let username = document.getElementById('username');
 let msgList = document.getElementById('msglist');
 
 
+socket.emit('join_room', {
+    roomid: startchat.getAttribute('data-roomid')
+});
+
+
 btn.onclick = function exec() {
     socket.emit('msg_send', {
         msg: inputMsg.value,
-        roomid: startchat.getAttribute('data-roomid')
-    });
-}
-
-startchat.onclick = function exec(){
-    socket.emit('join_room', {
+        username: username.value,
         roomid: startchat.getAttribute('data-roomid')
     });
 }
@@ -52,7 +52,7 @@ startchat.onclick = function exec(){
 
 socket.on('msg_rcvd', (data) => {
     let limsg = document.createElement('li');
-    limsg.innerText = data.msg;
+    limsg.innerText = `${data.username}: ${data.msg}`;
     msgList.appendChild(limsg);
 
 })
